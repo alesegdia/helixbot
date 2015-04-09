@@ -1,19 +1,12 @@
 
 package plugins;
 
+import IRCBot;
+
 class Plugin {
 
-	public function OnChatReceived( message:String ):Void {
-		if( this.OnValidChat(message) )
-		{
-			this.OnValidChat(message);
-		}
-	}
-
-	public function OnValidChat( message:String ):Bool {
-		return true;
-	}
-
+	public var bot(default, default):IRCBot;
+	public function OnChatReceived( message:String ):Void {}
 	public function Step():Void {}
 
 }
