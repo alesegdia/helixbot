@@ -12,9 +12,22 @@ class YouTubePlugin extends Plugin
 
 	override public function OnChatReceived( message:String ):Void {
 		var r = ~/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
-		if( r.match("https://www.youtube.com/embed/QTby08wxVdY?feature=player_detailpage") )
+		if( r.match(message) )
 		{
-			bot.Say("[YouTube] " + this.GetVideoTitleFromID(r.matched(1)));
+			var videoid = r.matched(1);
+			var query = bot.db.ytdata.find({videoid: videoid});
+			var count:Int = 1;
+			if( query.hasNext() )
+			{
+				var elem = query.next();
+				count = Std.parseInt(elem.count) + 1;
+				bot.db.ytdata.update(elem, { videoid:videoid, count:count });
+			}
+			else
+			{
+				bot.db.ytdata.insert({ videoid:videoid, count:count });
+			}
+			bot.Say("[YouTube] " + this.GetVideoTitleFromID(videoid) + '. Pasted $count times in my presence.');
 		}
 	}
 

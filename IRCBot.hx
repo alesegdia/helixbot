@@ -5,6 +5,11 @@ import haxe.io.Error;
 import plugins.Plugin;
 import plugins.YouTubePlugin;
 
+import org.mongodb.Mongo;
+import org.mongodb.Collection;
+import org.mongodb.Cursor;
+import org.mongodb.Database;
+
 class IRCBot {
 
 	// BOT CONFIG
@@ -13,6 +18,9 @@ class IRCBot {
 	private var channel:String = "#asdf";
 	private var botName:String = "helix__bot";
 
+	// MONGODB CONFIG
+	private var dbname:String = "helixbot";
+
 	private var plugins = new Array<Plugin>();
 	private function AddPlugin( plugin:Plugin ):Void
 	{
@@ -20,8 +28,13 @@ class IRCBot {
 		this.plugins.push(plugin);
 	}
 
+	private var mongo = new Mongo();
+	public var db:Database;
+
 	public function new() {
 		this.AddPlugin(new YouTubePlugin());
+		this.db = mongo.getDB(this.dbname);
+		this.connect(this.server, this.port);
 	}
 
 	public function Say(msg:String):Void {
@@ -61,8 +74,7 @@ class IRCBot {
 	private var host:Host;
 	private var socket:Socket = new Socket();
 
-	private function run():Void {
-		this.connect(this.server, this.port);
+	private function Run():Void {
 		var exitLoop:Bool = false;
 		while(!exitLoop)
 		{
@@ -88,7 +100,7 @@ class IRCBot {
 
 	static function main() {
 		var main:IRCBot = new IRCBot();
-		main.run();
+		main.Run();
 	}
 
 }
