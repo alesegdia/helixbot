@@ -2,11 +2,20 @@
 import sys.net.Host;
 import sys.net.Socket;
 import haxe.io.Error;
+import plugins.Plugin;
+import plugins.YouTubePlugin;
 
 class Main {
 
+	private var plugins = new Array<Plugin>();
+	private function AddPlugin( plugin:Plugin ):Void
+	{
+		plugins.push(plugin);
+	}
+
+
 	public function new() {
-		//initialize variables
+		this.AddPlugin(new YouTubePlugin());
 	}
 
 	private function send( msg:String ):Void {
@@ -43,14 +52,16 @@ class Main {
 			else if( commregex.match(msg) )
 			{
 				neko.Lib.println("[" + commregex.matched(1) +
-						         " " + commregex.matched(2) +
-						      " -> " + commregex.matched(3) +
-						        "] " + commregex.matched(4) );
+						" " + commregex.matched(2) +
+						" -> " + commregex.matched(3) +
+						"] " + commregex.matched(4) );
 			}
 		}
 	}
 
 	static function main() {
+		var plug = new YouTubePlugin();
+		neko.Lib.println(plug.GetVideoTitleFromID("NSpoqZVqtCg"));
 		var main:Main = new Main();
 		main.run();
 	}
