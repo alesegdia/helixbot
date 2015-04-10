@@ -10,7 +10,7 @@ class YouTubePlugin extends Plugin
 	public function new() {}
 	private var lastName:String;
 
-	override public function OnChatReceived( message:String ):Void {
+	override public function OnChatReceived( message:String, sender:String ):Void {
 		var r = ~/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
 		if( r.match(message) )
 		{

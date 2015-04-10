@@ -1,4 +1,5 @@
 
 -lib mongodb
+-lib selecthxml
 -main IRCBot
 -neko main.n

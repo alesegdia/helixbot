@@ -4,6 +4,8 @@ import sys.net.Socket;
 import haxe.io.Error;
 import plugins.Plugin;
 import plugins.YouTubePlugin;
+import plugins.CookiePlugin;
+import haxe.Http;
 
 import org.mongodb.Mongo;
 import org.mongodb.Collection;
@@ -31,14 +33,18 @@ class IRCBot {
 	private var mongo = new Mongo();
 	public var db:Database;
 
+	private var rng = new neko.Random();
 	public function new() {
 		this.AddPlugin(new YouTubePlugin());
+		var wqplugin = new CookiePlugin();
+		this.AddPlugin(wqplugin);
 		this.db = mongo.getDB(this.dbname);
 		this.connect(this.server, this.port);
+		wqplugin.ReparseSources();
 	}
 
 	public function Say(msg:String):Void {
-		neko.Lib.println("I say: " + msg);
+		//neko.Lib.println("I say: " + msg);
 		this.send('PRIVMSG $channel :$msg');
 	}
 
@@ -64,10 +70,10 @@ class IRCBot {
 		}
 	}
 
-	private function NotifyMessageToPlugins( msg:String ):Void {
+	private function NotifyMessageToPlugins( msg:String, sender:String ):Void {
 		for( plugin in this.plugins )
 		{
-			plugin.OnChatReceived(msg);
+			plugin.OnChatReceived(msg, sender);
 		}
 	}
 
@@ -92,7 +98,7 @@ class IRCBot {
 						" " + cmdRegex.matched(2) +
 						" -> " + cmdRegex.matched(3) +
 						"] " + cmdRegex.matched(4) );
-				this.NotifyMessageToPlugins(cmdRegex.matched(4));
+				this.NotifyMessageToPlugins(cmdRegex.matched(4), cmdRegex.matched(1));
 			}
 			this.StepPlugins();
 		}
