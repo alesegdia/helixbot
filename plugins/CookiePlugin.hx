@@ -23,7 +23,7 @@ class CookiePlugin extends Plugin
 			var totalcount = total.next().count;
 			bot.Say('$totalcount cookies have been opened in my presence.');
 		}
-		else if( ~/cookie/.match(message) )
+		else if( ~/cookie/.match(message) || ~/galleta/.match(message) )
 		{
 			var totalQuery = bot.db.cookiedata.find({"total":1});
 			if( !totalQuery.hasNext() )
