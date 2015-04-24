@@ -4,6 +4,7 @@ import sys.net.Socket;
 import haxe.io.Error;
 import plugins.Plugin;
 import plugins.YouTubePlugin;
+import plugins.CulturaChipPlugin;
 import plugins.CookiePlugin;
 import haxe.Http;
 
@@ -15,10 +16,10 @@ import org.mongodb.Database;
 class IRCBot {
 
 	// BOT CONFIG
-	private var server:String = "irc.freenode.net";
+	private var server:String = "irc.vieju.net";
 	private var port:Int = 6667;
-	private var channel:String = "#asdf";
-	private var botName:String = "helix__bot";
+	private var channel:String = "#culturachip";
+	private var botName:String = "helix";
 
 	// MONGODB CONFIG
 	private var dbname:String = "helixbot";
@@ -36,6 +37,7 @@ class IRCBot {
 	private var rng = new neko.Random();
 	public function new() {
 		this.AddPlugin(new YouTubePlugin());
+		this.AddPlugin(new CulturaChipPlugin());
 		var wqplugin = new CookiePlugin();
 		this.AddPlugin(wqplugin);
 		this.db = mongo.getDB(this.dbname);
